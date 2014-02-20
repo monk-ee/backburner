@@ -1,0 +1,50 @@
+{
+   u'AutoScalingGroupARN':   u'arn:   aws:   autoscaling:   us-west-2:314291494078:   autoScalingGroup:118334e4   -6e45   -462   a-8e8b-905f85e74dec:autoScalingGroupName/an-rtg-sdr-asg',
+   u'EndTime':   u'2014-02-20T10:06:56.177   Z',
+   u'Description':   u'Launching a new EC2 instance:i-944dd09c',
+   u'Service':u'AWS Auto Scaling',
+   u'RequestId':u'1cfd867e-1e42-41f1-8e98-dc4722542c8a',
+   u'AutoScalingGroupName':u'an-rtg-sdr-asg',
+   u'ActivityId':u'1cfd867e-1e42-41f1-8e98-dc4722542c8a',
+   u'EC2InstanceId':u'i-944dd09c',
+   u'Details':{
+      u'Availability Zone':u'us-west-2c',
+      u'InvokingAlarms':[
+         {
+            u'NewStateReason':            u'Threshold Crossed:1            datapoint (77.40625) was greater than the threshold (75.0).',
+            u'Region':u'US-West-2',
+            u'AlarmDescription':None,
+            u'NewStateValue':u'ALARM',
+            u'Trigger':{
+               u'EvaluationPeriods':1,
+               u'Dimensions':[
+                  {
+                     u'name':u'AutoScalingGroupName',
+                     u'value':u'an-rtg-sdr-asg'
+                  }
+               ],
+               u'Namespace':u'AWS/EC2',
+               u'Period':60,
+               u'ComparisonOperator':u'GreaterThanThreshold',
+               u'Statistic':u'AVERAGE',
+               u'Threshold':75,
+               u'Unit':None,
+               u'MetricName':u'CPUUtilization'
+            },
+            u'OldStateValue':u'OK',
+            u'AlarmName':u'rtg-sdr-hi',
+            u'StateChangeTime':1392890697150,
+            u'AWSAccountId':u'314291494078'
+         }
+      ]
+   },
+   u'StartTime':   u'2014-02-20T10:05:23.494   Z',
+   u'Time':   u'2014-02-20T10:06:56.177   Z',
+   u'Progress':50,
+   u'AccountId':u'314291494078',
+   u'Cause':   u'At 2014-02-20T10:04:57   Z a monitor alarm rtg-sdr-hi in state ALARM triggered policy rtg-sdr-scale-up changing the desired capacity from 8 to 9.  At 2014-02-20T10:05:23   Z an instance was started in response to a difference between desired and actual capacity,
+   increasing the capacity from 8 to 9.',
+   u'Event':   u'autoscaling:EC2_INSTANCE_LAUNCH',
+   u'StatusMessage':u'',
+   u'StatusCode':u'InProgress'
+}

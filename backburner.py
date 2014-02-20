@@ -5,10 +5,33 @@ from datetime import date
 import sys
 import logging
 
-import boto.sqs
+import boto.sqs, boto.ec2
 import yaml
 from boto.sqs.message import RawMessage
 import json
+
+def terminationAction(ec2_instance_id,config):
+    print "terminate"
+    #take some action - AutoScalingGroupName
+    print ec2_instance_id['EC2InstanceId']
+    print ec2_instance_id['AutoScalingGroupName']
+    ec2_conn = boto.ec2.connect_to_region("us-west-2",aws_access_key_id=config['s3']['aws_access_key'], aws_secret_access_key=config['s3']['aws_secret_key'])
+    reservations = ec2_conn.get_all_instances(instance_ids=[ec2_instance_id['EC2InstanceId']])
+    print reservations
+    for instance in reservations:
+        print instance.instances[0]
+
+
+def launchAction(ec2_instance_id,config):
+    #take some action
+    print "launch"
+    print ec2_instance_id['EC2InstanceId']
+    print ec2_instance_id['AutoScalingGroupName']
+    ec2_conn = boto.ec2.connect_to_region("us-west-2",aws_access_key_id=config['s3']['aws_access_key'], aws_secret_access_key=config['s3']['aws_secret_key'])
+    reservations = ec2_conn.get_all_instances(instance_ids=[ec2_instance_id['EC2InstanceId']])
+    print reservations
+    for instance in reservations:
+        print instance.instances[0]
 
 def main(argv):
     tag = ''
@@ -39,10 +62,17 @@ def main(argv):
         queue = sqs.get_queue(config['sqs']['name'])
         queue.set_message_class(RawMessage)
         print queue.count()
-        for msg in queue.get_messages(5,visibility_timeout=10):
+        for msg in queue.get_messages(10,visibility_timeout=10):
             single_message = json.loads(msg.get_body())
-            print single_message['Message']
-            #q.delete_message(m)
+            message =  json.loads(single_message['Message'])
+            #clean up messages on setup
+            if message['Event'] == "autoscaling:TEST_NOTIFICATION":
+                queue.delete_message(msg)
+            elif message['Event']  == "autoscaling:EC2_INSTANCE_TERMINATE":
+                terminationAction(message,config)
+            elif message['Event']  == "autoscaling:EC2_INSTANCE_LAUNCH":
+                launchAction(message,config)
+
     except BaseException, emsg:
          logging.warning(timestamp + ': cannot get messages: ' + str(emsg))
          sys.exit(2)

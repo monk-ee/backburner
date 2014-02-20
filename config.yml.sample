@@ -1,0 +1,18 @@
+sns:
+ arn: arn:aws:sns:us-west-2::Backburner:fd423a62-0cda-496f-b8af-f530d91eb399
+ topic: arn:aws:sns:us-west-2::Backburner
+sqs:
+ name: backburner-autoscale-ufw
+ arn: arn:aws:sqs:us-west-2::-autoscale-ufw
+s3:
+ account_number: ''
+ billing_bucket: ''
+ name              : ''
+ aws_access_key    : ''
+ aws_secret_key    : '+'
+general:
+ format: 'standard'
+ filter: ''
+ time_zone: 'Australia/Brisbane'
+ debug: 'true'
+logfile: 'backburner.log'

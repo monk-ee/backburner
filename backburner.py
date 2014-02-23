@@ -5,6 +5,7 @@ from datetime import date
 import sys
 import logging
 
+from pprint import pprint
 import boto.sqs, boto.ec2
 import yaml
 from boto.sqs.message import RawMessage
@@ -16,10 +17,10 @@ def terminationAction(ec2_instance_id,config):
     print ec2_instance_id['EC2InstanceId']
     print ec2_instance_id['AutoScalingGroupName']
     ec2_conn = boto.ec2.connect_to_region("us-west-2",aws_access_key_id=config['s3']['aws_access_key'], aws_secret_access_key=config['s3']['aws_secret_key'])
-    reservations = ec2_conn.get_all_instances(instance_ids=[ec2_instance_id['EC2InstanceId']])
-    print reservations
-    for instance in reservations:
-        print instance.instances[0]
+    reservations = ec2_conn.get_all_instances(instance_ids=[str(ec2_instance_id['EC2InstanceId'])])
+    instances = [i for r in reservations for i in r.instances]
+    for i in instances:
+        pprint(i.__dict__)
 
 
 def launchAction(ec2_instance_id,config):
@@ -28,10 +29,10 @@ def launchAction(ec2_instance_id,config):
     print ec2_instance_id['EC2InstanceId']
     print ec2_instance_id['AutoScalingGroupName']
     ec2_conn = boto.ec2.connect_to_region("us-west-2",aws_access_key_id=config['s3']['aws_access_key'], aws_secret_access_key=config['s3']['aws_secret_key'])
-    reservations = ec2_conn.get_all_instances(instance_ids=[ec2_instance_id['EC2InstanceId']])
-    print reservations
-    for instance in reservations:
-        print instance.instances[0]
+    reservations = ec2_conn.get_all_instances(instance_ids=[str(ec2_instance_id['EC2InstanceId'])])
+    instances = [i for r in reservations for i in r.instances]
+    for i in instances:
+        pprint(i.__dict__)
 
 def main(argv):
     tag = ''
@@ -62,7 +63,7 @@ def main(argv):
         queue = sqs.get_queue(config['sqs']['name'])
         queue.set_message_class(RawMessage)
         print queue.count()
-        for msg in queue.get_messages(10,visibility_timeout=10):
+        for msg in queue.get_messages(1,visibility_timeout=10):
             single_message = json.loads(msg.get_body())
             message =  json.loads(single_message['Message'])
             #clean up messages on setup
